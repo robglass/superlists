@@ -81,7 +81,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser = webdriver.Firefox()
 
         self.browser.get(self.live_server_url)
-        page_text= self.browser.find_element_by_tag_name('body')
+        page_text= self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('This is a new list', page_text)
         self.assertNotIn('Push app to git.', page_text)
 
@@ -95,9 +95,10 @@ class NewVisitorTest(LiveServerTestCase):
         second_list_url = self.browser.current_url
         self.assertRegex(second_list_url, '/lists/.+')
         self.assertNotEqual(first_list_url, second_list_url)
-        
+
         # New list doesnt include first list items
-        page_text = self.browser.find_element_by_tag_name('body')
+        page_text = self.browser.find_element_by_tag_name('body').text
         self.assertIn('Buy Milk', page_text)
         self.assertNotIn('Push app to git.', page_text)
+
 
