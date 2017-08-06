@@ -1,9 +1,9 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
-import unittest
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
 
@@ -20,7 +20,7 @@ class NewVisitorTest(unittest.TestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
 
         # User notes the page title and header mention to-do lists.
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         self.assertIn('To-Do', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('To-Do', header_text)
@@ -48,13 +48,10 @@ class NewVisitorTest(unittest.TestCase):
 
         # Page updates again, and now shows both items
         self.check_for_row_in_list_table('1: Finish App')
-        self.check_for_row_in_list_table('2: Push app to git. ')
+        self.check_for_row_in_list_table('2: Push app to git.')
 
 
         # User notices sites URL has changed.
 
         # navigating to new URL shows same to-do list.
         self.fail('Finish the tests!')
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
