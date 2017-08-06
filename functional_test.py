@@ -29,13 +29,14 @@ class NewVisitorTest(unittest.TestCase):
         inputBox.send_keys('Finish App')
 
         # When User hits enter, the page updates, and now the page lists "1. Finish App" in a to-do list
-        inputBox.send_keys(Keys.Enter)
+        inputBox.send_keys(Keys.ENTER)
         time.sleep(1)
 
         table = self.browser.find_element_by_id('id_table_list')
-        rows = table.find_element_by_tag_name('tr')
+        rows = table.find_elements_by_tag_name('tr')
         self.assertTrue(
-            any(row.text == '1. Finish App' for row in rows)
+            any(row.text == '1. Finish App' for row in rows),
+            "New to-do item did not appear in table"
         )
 
         # There is still a textbox for the User to enter another item. User enters "Upload to git."
