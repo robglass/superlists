@@ -7,8 +7,15 @@ class NewVisitorTest(unittest.TestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
 
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_table_list')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
     def tearDown(self):
         self.browser.quit()
+
+
 
     def test_can_start_a_list_and_retrieve_it_later(self):
 
@@ -31,11 +38,7 @@ class NewVisitorTest(unittest.TestCase):
         # When User hits enter, the page updates, and now the page lists "1. Finish App" in a to-do list
         inputBox.send_keys(Keys.ENTER)
         time.sleep(1)
-
-        table = self.browser.find_element_by_id('id_table_list')
-        rows = table.find_elements_by_tag_name('tr')
-
-        self.assertIn('1: Finish App', [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Finish App')
 
         # There is still a textbox for the User to enter another item. User enters "Upload to git."
         inputBox = self.browser.find_element_by_id('id_new_item')
@@ -44,10 +47,8 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(1)
 
         # Page updates again, and now shows both items
-        table = self.browser.find_element_by_id('id_table_list')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: Finish App', [row.text for row in rows])
-        self.assertIn('2: Push app to git.', [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Finish App')
+        self.check_for_row_in_list_table('2: Push app to git. ')
 
 
         # User notices sites URL has changed.
